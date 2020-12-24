@@ -1,6 +1,26 @@
 const express = require("express"); // import express
 const app = express();
 const Post = require("./api/models/posts"); //get the specific class
+const multer = require("multer");
+const storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+		cb(null, "./uploads");
+	},
+	filename: function (req, file, cb) {
+		cb(null, `${file.fieldname}-${Date.now()}${getExt(file.mimetype)}`);
+	},
+});
+
+const getExt = (mimetype) => {
+	switch (mimetype) {
+		case "image/png":
+			return ".png";
+		case "image/jpeg":
+			return ".jpg";
+	}
+};
+
+var upload = multer({ storage: storage });
 const postsData = new Post();
 
 app.use((req, res, next) => {
@@ -26,16 +46,16 @@ app.get("/api/posts/:post_id", (req, res) => {
 	}
 });
 
-app.post("/api/posts", (req, res) => {
+app.post("/api/posts", upload.single("post-image"), (req, res) => {
 	const newPost = {
-		id: `${Date.now()}`,
+		id: `${Date.now()}`, //id,title en the rest where in "" but prettier changed it like this without the ""
 		title: req.body.title,
 		content: req.body.content,
-		post_image: req.body["post-image"],
+		post_image: req.file.path,
 		added_date: `${Date.now()}`,
 	};
 	postsData.add(newPost);
-	res.status(201).send(newPost);
+	res.status(201).send("ok"); // 201 = something has been created or added
 });
 
 app.listen(3000, () => console.log("Listening on http://localhost:3000")); //initialize the server
