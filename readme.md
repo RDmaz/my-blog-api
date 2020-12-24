@@ -19,4 +19,4 @@ Open Terminal
 
 Create `app.js` file
 
-Start: nodemon app.js
+Start later: nodemon app.js
