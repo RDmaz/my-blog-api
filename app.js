@@ -60,7 +60,7 @@ app.post("/api/posts", upload.single("post-image"), (req, res) => {
 
 app.listen(3000, () => console.log("Listening on http://localhost:3000")); //initialize the server
 
-// with the lines bellow above res.status(200) we've tested putting a new blog to data.json file.
+// with the lines bellow, above res.status(200) we've tested putting a new blog to data.json file.
 // const test = {
 // 	testing: "testing"
 // }
